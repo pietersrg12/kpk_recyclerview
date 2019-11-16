@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/idpel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="441109876429" />
+
+    <TextView
+        android:id="@+id/nama"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SAMSUL"
+        android:textAllCaps="true"
+        android:textColor="#184a59"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/alamat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="JL. Sesama no. 8"
+        android:textSize="13dp" />
+
+    <TextView
+        android:id="@+id/trfdya"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="R1/1300VA" />
+
+</LinearLayout>
