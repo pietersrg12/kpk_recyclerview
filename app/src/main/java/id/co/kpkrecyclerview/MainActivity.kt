@@ -7,35 +7,83 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import id.co.kpkrecyclerview.model.Pelanggan
 import kotlinx.android.synthetic.main.activity_main.*
 import id.co.kpkrecyclerview.adapter.PelangganAdapter
+import org.jetbrains.anko.db.insert
+import org.jetbrains.anko.db.select
 
 class MainActivity : AppCompatActivity() {
 
     //buat global variable untuk menampung data pelanggan
 
     var listPlg = mutableListOf<Pelanggan>()
-
+    val adapterPlg = PelangganAdapter(listPlg)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        //tambahkan data kedalam variable pelanggan
-        listPlg.add(Pelanggan("441102949294", "Samsul1", "Jl. Sesama  1", "R1", "900"))
-        listPlg.add(Pelanggan("441102949233", "Samsul2", "Jl. Sesama2", "R1", "900"))
-        listPlg.add(Pelanggan("441102949292", "Samsul3", "Jl. Sesama3", "R1", "900"))
-        listPlg.add(Pelanggan("441102949291", "Samsul4", "Jl. Sesama4", "R1", "900"))
-        listPlg.add(Pelanggan("441102949290", "Samsul5", "Jl. Sesama5", "R1", "900"))
-        listPlg.add(Pelanggan("441102949290", "Samsul6", "Jl. Sesama5", "R1", "900"))
-        listPlg.add(Pelanggan("441102949232", "Samsul7", "Jl. Sesama5", "R1", "900"))
-        listPlg.add(Pelanggan("441102949216", "Samsul8", "Jl. Sesama5", "R1", "900"))
-        listPlg.add(Pelanggan("441102949234", "Samsul9", "Jl. Sesama5", "R1", "900"))
-        listPlg.add(Pelanggan("441102949283", "Samsul10", "Jl. Sesama5", "R1", "900"))
-        listPlg.add(Pelanggan("441102949226", "Samsul11", "Jl. Sesama5", "R1", "900"))
+        initTampilan()
 
         //masukan data pelanggan ke recycler view
 
         rv.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = PelangganAdapter(listPlg)
+            adapter = adapterPlg
         }
     }
+
+    fun initTampilan() {
+        btnsimpan.setOnClickListener {
+            database.use {
+                insert(
+                    "pelanggan",
+                    "idpel" to idpel.text.toString(),
+                    "nama" to nama.text.toString(),
+                    "alamat" to alamat.text.toString(),
+                    "tarif" to tarif.text.toString(),
+                    "daya" to daya.text.toString()
+                )
+                listPlg.add(
+                    Pelanggan(
+                        idpel.text.toString(),
+                        nama.text.toString(),
+                        alamat.text.toString(),
+                        tarif.text.toString(),
+                        daya.text.toString()
+
+                    )
+                )
+                adapterPlg.notifyDataSetChanged()
+            }
+
+        }
+    }
+
+    override fun onResume() {
+        bacaDatabase()
+        super.onResume()
+    }
+
+
+    fun bacaDatabase() {
+        database.use {
+            select("pelanggan").exec {
+               // if (isFirst) {
+                    while (this.moveToNext()) {
+                        listPlg.add(
+                            Pelanggan(
+                                getString(getColumnIndex("idpel")),
+                                getString(getColumnIndex("nama")),
+                                getString(getColumnIndex("alamat")),
+                                getString(getColumnIndex("tarif")),
+                                getString(getColumnIndex("daya"))
+
+                            )
+                        )
+
+                    }
+                    adapterPlg.notifyDataSetChanged()
+                //}
+
+            }
+        }
+    }
+
 }
